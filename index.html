@@ -1,0 +1,813 @@
+<title>Soie Noire</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+/* Layout: a gallery you scroll. Greige band header (GAEA) · full-bleed photographic hero (Carine Roitfeld)
+   · dark photograph beside a quiet panel, centred note tabs, thumbnail row (Byredo)
+   · one horizontal exhibition strip as the centrepiece. Serif for names only; everything you read is sans. */
+:root{
+  --paper:#FAF9F6; --greige:#E6E1D7; --seam:#EDEAE4; --ink:#24211D; --ink-2:#5F584E; --hair:#D9D3C8;
+  --accent:#8C7550; --cursor:#A2535C; --on-dark:#F4F0E8; --dark:#121110;
+  --display:'EB Garamond',Garamond,Georgia,'Times New Roman',serif;
+  --sans:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --gx:clamp(18px,5vw,72px);
+  --t-micro:10px; --t-label:11px; --t-small:13.5px; --t-read:15px; --t-body:16px;
+  --ls-micro:.24em; --ls-label:.16em; --ls-mark:.3em;
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#15140F; --greige:#1E1C16; --seam:#1C1A15; --ink:#EFEADF; --ink-2:#A79E90; --hair:#332F28;
+  --accent:#C2A776; --dark:#0C0B09; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#15140F; --greige:#1E1C16; --seam:#1C1A15; --ink:#EFEADF; --ink-2:#A79E90; --hair:#332F28;
+  --accent:#C2A776; --dark:#0C0B09; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.72 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:clip}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:12;background:var(--greige)}
+h1,h2,h3,p,figure,dl,dd,ul{margin:0}
+ul{padding:0;list-style:none}
+img{display:block}
+button{font:inherit;color:inherit}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:1px solid var(--accent);outline-offset:4px}
+.wrap{width:100%;max-width:1420px;margin-inline:auto;padding-left:max(var(--gx),env(safe-area-inset-left,0px));padding-right:max(var(--gx),env(safe-area-inset-right,0px))}
+.eyebrow{font:500 var(--t-label)/1.6 var(--sans);letter-spacing:var(--ls-label);text-transform:uppercase;color:var(--ink-2)}
+h2{font:400 clamp(1.85rem,3.6vw,3rem)/1.22 var(--display);letter-spacing:.005em;text-wrap:balance}
+.lede{color:var(--ink-2);max-width:34rem}
+.grain{position:absolute;inset:0;pointer-events:none;background-image:var(--grain);opacity:.18;mix-blend-mode:overlay}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:16px 32px;background:var(--ink);color:var(--paper);border:1px solid var(--ink);font:500 var(--t-label)/1 var(--sans);letter-spacing:var(--ls-label);text-transform:uppercase;cursor:pointer;transition:background-color .45s,color .45s}
+.btn:hover{background:transparent;color:var(--ink)}
+.btn.wide{width:100%}
+.btn.ghost{background:transparent;color:var(--on-dark);border-color:rgba(244,240,232,.55)}
+.btn.ghost:hover{background:var(--on-dark);color:var(--dark);border-color:var(--on-dark)}
+.link{display:inline-block;background:none;border:0;padding:4px 0;font:500 var(--t-label)/1.6 var(--sans);letter-spacing:var(--ls-label);text-transform:uppercase;cursor:pointer;border-bottom:1px solid currentColor}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* reveal on scroll, switched on only once the script runs, so the page is whole at rest */
+.anim [data-rise]{opacity:0;transform:translateY(26px)}
+.anim [data-rise].in{opacity:1;transform:none;transition:opacity 1.1s ease,transform 1.1s cubic-bezier(.16,1,.3,1)}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:11;background:var(--greige)}
+.top-in{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:66px}
+.nav-l,.nav-r{display:flex;align-items:center;gap:clamp(16px,2.6vw,36px)}
+.nav-r{justify-content:flex-end}
+.top a,.bag-btn{font:400 var(--t-small)/1 var(--sans);letter-spacing:.015em;background:none;border:0;padding:14px 0;cursor:pointer}
+.top a:not(.mark){border-bottom:1px solid transparent;transition:border-color .3s}
+.top a:not(.mark):hover{border-bottom-color:currentColor}
+.mark{font:400 clamp(17px,2.2vw,24px)/1 var(--display)!important;letter-spacing:var(--ls-mark)!important;text-transform:uppercase;padding-left:.3em}
+.bag-btn span{margin-left:6px;color:var(--ink-2);transition:color .3s}
+.bag-btn.bump span{color:var(--ink)}
+
+/* hero */
+.hero{position:relative;overflow:hidden;isolation:isolate;display:flex;align-items:center;justify-content:center;min-height:clamp(580px,76vh,840px);background:var(--dark)}
+.hero-media{position:absolute;inset:0;z-index:-3;overflow:hidden}
+.hero-media img,.hero-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 50%}
+.hero-media img{animation:heroIn 2.6s cubic-bezier(.16,1,.3,1) both,drift 40s ease-in-out 2.6s infinite alternate}
+.hero-media video{animation:heroIn 2.6s cubic-bezier(.16,1,.3,1) both}
+@keyframes heroIn{from{transform:scale(1.16)}to{transform:scale(1.02)}}
+@keyframes drift{from{transform:scale(1.02)}to{transform:scale(1.12) translate(-1.6%,-1.4%)}}
+.hero-veil{position:absolute;inset:0;z-index:-2;background:linear-gradient(to bottom,rgba(10,9,7,.52),rgba(10,9,7,.22) 44%,rgba(10,9,7,.7))}
+.hero-in{display:flex;flex-direction:column;align-items:center;gap:clamp(18px,2.6vw,30px);text-align:center;padding-block:clamp(90px,12vw,150px);color:var(--on-dark)}
+.hero .eyebrow{color:rgba(244,240,232,.75)}
+.hero h1{font:400 clamp(2.6rem,8.4vw,6.4rem)/1.08 var(--display);letter-spacing:.17em;text-transform:uppercase;padding-left:.17em}
+@media (min-width:700px){.hero h1{letter-spacing:.12em;padding-left:.12em}}
+@media (min-width:1100px){.hero h1{letter-spacing:.085em;padding-left:.085em}}
+.hero h1 span{display:inline-block;animation:letterIn 1.5s cubic-bezier(.16,1,.3,1) both}
+@keyframes letterIn{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
+.hero-sub{max-width:32rem;color:rgba(244,240,232,.86)}
+.hero-cta{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:16px 32px;margin-top:8px}
+.hero-cta .link{color:var(--on-dark)}
+.scroll-hint{position:absolute;left:50%;translate:-50% 0;bottom:24px;display:grid;justify-items:center;gap:9px;font:500 var(--t-micro)/1 var(--sans);letter-spacing:var(--ls-micro);text-transform:uppercase;color:rgba(244,240,232,.62)}
+.scroll-hint i{display:block;width:1px;height:36px;background:linear-gradient(to bottom,rgba(244,240,232,.65),transparent);animation:drop 2.8s ease-in-out infinite}
+@keyframes drop{0%,100%{transform:scaleY(.3);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}}
+
+/* manifesto */
+.manifesto{background:var(--greige);text-align:center;padding-block:clamp(74px,10vw,150px)}
+.mf{max-width:34rem;margin:26px auto 0;font:400 clamp(1.3rem,2.4vw,1.85rem)/1.62 var(--display);text-wrap:pretty}
+
+/* collection */
+.coll{padding-block:clamp(74px,10vw,160px)}
+.sec-head{display:grid;gap:16px;justify-items:center;text-align:center}
+.stage{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);align-items:stretch;margin-top:clamp(36px,5vw,70px);border:1px solid var(--hair)}
+.stage-img{position:relative;overflow:hidden;aspect-ratio:4/5;background:var(--dark)}
+.stage-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .7s ease,transform 1.1s cubic-bezier(.16,1,.3,1)}
+.stage-img.swap img{opacity:0;transform:scale(1.05)}
+.stage-tint{position:absolute;inset:0;background:var(--scent,#C8A464);opacity:.3;mix-blend-mode:color;transition:background-color 1s}
+.stage-num{position:absolute;left:clamp(16px,2.2vw,28px);top:clamp(10px,1.6vw,20px);font:400 clamp(3rem,6vw,4.8rem)/1 var(--display);color:rgba(244,240,232,.5)}
+.panel{display:flex;flex-direction:column;justify-content:center;gap:clamp(10px,1.2vw,16px);padding:clamp(28px,4vw,62px);border-left:1px solid var(--hair);text-align:center}
+.panel-top{display:flex;justify-content:space-between;gap:12px;font:500 var(--t-label)/1.6 var(--sans);letter-spacing:var(--ls-label);text-transform:uppercase;color:var(--ink-2)}
+.p-name{font:italic 400 clamp(1.7rem,3vw,2.5rem)/1.16 var(--display);letter-spacing:.045em;text-transform:uppercase}
+.p-fam{font:500 var(--t-label)/1.6 var(--sans);letter-spacing:var(--ls-label);text-transform:uppercase;color:var(--ink-2)}
+.p-moment{font:400 clamp(1.1rem,1.6vw,1.3rem)/1.6 var(--display);max-width:25rem;margin:4px auto 0}
+.p-nav{display:flex;justify-content:center;gap:12px;margin-top:6px}
+.arrow{width:40px;height:40px;display:grid;place-items:center;border:1px solid var(--hair);border-radius:50%;background:transparent;color:var(--ink-2);cursor:pointer;font-size:13px;line-height:1;transition:border-color .35s,color .35s}
+.arrow:hover{border-color:var(--ink);color:var(--ink)}
+.buy{display:grid;gap:13px;margin-top:clamp(8px,1.4vw,18px)}
+.sizes{display:flex;justify-content:center;gap:9px}
+.size{padding:10px 18px;background:transparent;border:1px solid var(--hair);color:var(--ink-2);font:500 var(--t-label)/1 var(--sans);letter-spacing:var(--ls-label);text-transform:uppercase;cursor:pointer;transition:border-color .3s,color .3s}
+.size[aria-checked="true"]{border-color:var(--ink);color:var(--ink)}
+.price{font:400 1.5rem/1 var(--display)}
+
+.tabs{margin-top:clamp(48px,6vw,88px);display:flex;justify-content:center;gap:clamp(22px,5vw,64px);border-bottom:1px solid var(--hair)}
+.tab{background:none;border:0;border-bottom:1px solid transparent;margin-bottom:-1px;padding:17px 2px;font:500 var(--t-label)/1 var(--sans);letter-spacing:var(--ls-label);text-transform:uppercase;color:var(--ink-2);cursor:pointer;transition:color .3s}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.tabbody{max-width:40rem;min-height:150px;margin-inline:auto;padding-block:clamp(30px,4vw,54px);text-align:center}
+.story{font-size:var(--t-body);line-height:1.8;text-wrap:pretty}
+.pyr{display:grid;gap:22px}
+.pyr dt{font:500 var(--t-label)/1.6 var(--sans);letter-spacing:var(--ls-label);text-transform:uppercase;color:var(--ink-2);margin-bottom:4px}
+.pyr dd{font:400 clamp(1.15rem,1.7vw,1.4rem)/1.45 var(--display)}
+.det{display:grid;grid-template-columns:auto 1fr;max-width:28rem;margin-inline:auto;text-align:left}
+.det dt,.det dd{padding:13px 0;border-bottom:1px solid var(--hair)}
+.det dt{font:500 var(--t-label)/1.8 var(--sans);letter-spacing:var(--ls-label);text-transform:uppercase;color:var(--ink-2);padding-right:28px}
+.det dd{text-align:right;font-size:var(--t-read)}
+.dots{display:inline-flex;gap:5px;vertical-align:middle;margin-right:9px}
+.dots i{width:5px;height:5px;border-radius:50%;border:1px solid var(--ink-2)}
+.dots i.on{background:var(--ink);border-color:var(--ink)}
+
+.pick{margin-top:clamp(34px,4vw,60px);text-align:center}
+.thumbs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:1px;margin-top:20px;background:var(--hair);border:1px solid var(--hair)}
+.thumb{display:block;width:100%;padding:0;background:var(--paper);border:0;cursor:pointer}
+.thumb-tile{position:relative;overflow:hidden;aspect-ratio:4/5;background:var(--dark)}
+.thumb-tile img{width:100%;height:100%;object-fit:cover;filter:brightness(.85);transition:filter .45s ease}
+.thumb:hover .thumb-tile img{filter:brightness(.96)}
+.thumb[aria-current="true"] .thumb-tile img{filter:brightness(1)}
+.thumb-tile::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--accent);transform:scaleX(0);transform-origin:left center;transition:transform .55s cubic-bezier(.16,1,.3,1)}
+.thumb[aria-current="true"] .thumb-tile::after{transform:scaleX(1)}
+.thumb[aria-current="true"] .thumb-name{color:var(--accent)}
+.thumb-meta{display:block;padding:14px 6px 18px}
+.thumb-name{display:block;font:italic 400 clamp(.95rem,1.15vw,1.1rem)/1.3 var(--display);letter-spacing:.03em;text-transform:uppercase}
+.thumb-price{display:block;margin-top:4px;font:400 var(--t-small)/1.4 var(--sans);color:var(--ink-2)}
+
+/* exhibition strip */
+.expo{padding-block:clamp(74px,10vw,150px);background:var(--dark);color:var(--on-dark);overflow:hidden}
+.expo .eyebrow{color:rgba(244,240,232,.6)}
+.expo h2{color:var(--on-dark)}
+.expo .lede{color:rgba(244,240,232,.7)}
+.expo-head{display:grid;gap:14px;max-width:36rem}
+.rail{display:flex;gap:clamp(12px,1.6vw,26px);margin-top:clamp(28px,4vw,52px);padding-inline:var(--gx);overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;cursor:grab;-webkit-mask-image:linear-gradient(to right,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(to right,transparent,#000 7%,#000 93%,transparent)}
+.rail::-webkit-scrollbar{display:none}
+.rail:active{cursor:grabbing}
+.rail figure{flex:0 0 min(74vw,320px);margin:0}
+.rail .ph{display:block;position:relative;overflow:hidden;aspect-ratio:4/5;background:#000}
+.rail img{width:100%;height:100%;object-fit:cover;transition:transform 1.6s cubic-bezier(.16,1,.3,1)}
+.rail figure:hover img{transform:scale(1.07)}
+.rail figcaption{display:grid;gap:5px;padding-top:16px}
+.rail .cap-n{font:500 var(--t-micro)/1.6 var(--sans);letter-spacing:var(--ls-micro);text-transform:uppercase;color:rgba(244,240,232,.5)}
+.rail .cap-t{font:italic 400 1.2rem/1.3 var(--display);letter-spacing:.02em}
+.rail .cap-d{font-size:var(--t-read);line-height:1.68;color:rgba(244,240,232,.68)}
+.expo-foot{display:flex;align-items:center;gap:16px;margin-top:clamp(24px,3vw,40px);font:500 var(--t-micro)/1 var(--sans);letter-spacing:var(--ls-micro);text-transform:uppercase;color:rgba(244,240,232,.5)}
+.expo-foot i{flex:1;height:1px;background:rgba(244,240,232,.2);position:relative;overflow:hidden}
+.expo-foot i::after{content:"";position:absolute;top:0;bottom:0;left:0;width:26%;background:rgba(244,240,232,.8);transform:translateX(var(--rail-p,0%))}
+
+/* rituel */
+.rituel{background:var(--greige);padding-block:clamp(74px,10vw,160px)}
+.rituel-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(36px,6vw,100px);align-items:start}
+.rituel-l{display:grid;gap:22px;justify-items:start}
+.ta{width:100%;display:block;background:transparent;border:0;border-bottom:1px solid var(--ink);border-radius:0;padding:14px 0;font:400 clamp(1.1rem,1.6vw,1.3rem)/1.6 var(--display);color:var(--ink);resize:none;outline:none}
+.ta:focus-visible{outline:none;border-bottom-color:var(--accent)}
+.chips{display:grid;gap:9px;width:100%}
+.chip{padding:12px 0;background:transparent;border:0;border-bottom:1px solid var(--hair);color:var(--ink-2);font:400 var(--t-read)/1.6 var(--sans);text-align:left;cursor:pointer;transition:color .3s,border-color .3s}
+.chip:hover{color:var(--ink);border-bottom-color:var(--ink)}
+.res li{display:grid;grid-template-columns:clamp(84px,10vw,120px) minmax(0,1fr);gap:clamp(16px,2.4vw,32px);padding-block:24px;border-top:1px solid var(--hair);animation:rise .9s cubic-bezier(.16,1,.3,1) both}
+.res li:nth-child(2){animation-delay:.14s}.res li:nth-child(3){animation-delay:.28s}
+.res li:last-child{border-bottom:1px solid var(--hair)}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.r-tile{overflow:hidden;aspect-ratio:4/5;background:var(--dark)}
+.r-tile img{width:100%;height:100%;object-fit:cover}
+.r-body{display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-width:0}
+.r-body h3{font:italic 400 clamp(1.15rem,1.7vw,1.45rem)/1.25 var(--display);letter-spacing:.04em;text-transform:uppercase}
+.r-body p{color:var(--ink-2);max-width:30rem;font-size:var(--t-read)}
+.r-body .link{margin-top:5px;color:var(--ink)}
+.thinking{padding-block:40px;font:400 1.2rem/1.5 var(--display);color:var(--ink-2)}
+
+/* maison */
+.maison{padding-block:clamp(74px,10vw,160px)}
+.maison-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(36px,6vw,110px);align-items:center}
+.maison-img{position:relative;overflow:hidden;aspect-ratio:4/5;background:var(--dark)}
+.maison-img img{width:100%;height:100%;object-fit:cover;transform:scale(1.14);will-change:transform}
+.maison-img figcaption{position:absolute;left:22px;bottom:20px;font:500 var(--t-micro)/1.6 var(--sans);letter-spacing:var(--ls-micro);text-transform:uppercase;color:rgba(244,240,232,.85)}
+.maison-text{display:grid;gap:22px;justify-items:start}
+.maison-text p.body{max-width:31rem;color:var(--ink-2)}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,2.6vw,36px);width:100%;max-width:32rem;padding-top:28px;margin-top:8px;border-top:1px solid var(--hair)}
+.facts dt{font:400 clamp(2rem,3.4vw,2.9rem)/1 var(--display)}
+.facts dd{margin-top:8px;font:500 var(--t-micro)/1.7 var(--sans);letter-spacing:var(--ls-micro);text-transform:uppercase;color:var(--ink-2)}
+
+/* footer */
+.foot{background:var(--greige);padding-block:clamp(54px,7vw,92px) 38px}
+.foot-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr) minmax(0,1.3fr);gap:clamp(28px,5vw,76px);align-items:start}
+.foot-mark{font:400 clamp(1.15rem,1.9vw,1.5rem)/1 var(--display);letter-spacing:var(--ls-mark);text-transform:uppercase}
+.foot-note{margin-top:16px;color:var(--ink-2);max-width:20rem;font-size:var(--t-read)}
+.foot nav{display:grid;gap:13px;justify-items:start}
+.foot-addr{display:grid;gap:11px;justify-items:start;margin-top:20px;font:400 var(--t-small)/1.7 var(--sans);font-style:normal;color:var(--ink-2)}
+.foot-addr a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--hair);padding-bottom:2px;transition:border-color .4s}
+.foot-addr a:hover,.foot-addr a:focus-visible{border-color:var(--ink)}
+.nl label{display:block;font:500 var(--t-label)/1.7 var(--sans);letter-spacing:var(--ls-label);text-transform:uppercase;color:var(--ink-2);margin-bottom:6px}
+.nl-row{display:flex;gap:14px;border-bottom:1px solid var(--ink)}
+.nl-row input{flex:1;min-width:0;background:transparent;border:0;padding:12px 0;font:400 var(--t-body)/1.5 var(--sans);color:var(--ink);outline:none}
+.nl-row button{background:none;border:0;cursor:pointer;font:500 var(--t-label)/1 var(--sans);letter-spacing:var(--ls-label);text-transform:uppercase}
+.nl-msg{margin-top:11px;min-height:1.5em;font:400 1.05rem/1.5 var(--display)}
+.legal{margin-top:clamp(36px,5vw,66px);padding-top:22px;border-top:1px solid var(--hair);color:var(--ink-2);font-size:var(--t-small)}
+
+/* bag, toast, sound */
+.scrim{position:fixed;inset:0;z-index:20;background:rgba(18,16,12,.42);opacity:0;visibility:hidden;transition:opacity .5s,visibility 0s .5s}
+.scrim.on{opacity:1;visibility:visible;transition:opacity .5s}
+.drawer{position:fixed;z-index:21;top:0;right:0;bottom:0;width:min(450px,100%);display:flex;flex-direction:column;background:var(--paper);padding:calc(26px + env(safe-area-inset-top,0px)) max(26px,env(safe-area-inset-right,0px)) calc(26px + env(safe-area-inset-bottom,0px)) 26px;transform:translateX(100%);visibility:hidden;transition:transform .6s cubic-bezier(.16,1,.3,1),visibility 0s .6s}
+.drawer.open{transform:none;visibility:visible;transition:transform .6s cubic-bezier(.16,1,.3,1)}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:18px;border-bottom:1px solid var(--hair)}
+.drawer-head h2{font-size:1.6rem}
+.cart-list{flex:1;overflow-y:auto}
+.cart-empty{padding-block:44px;color:var(--ink-2);font:400 1.1rem/1.6 var(--display);text-align:center}
+.cart-list li{display:grid;grid-template-columns:60px minmax(0,1fr) auto;gap:16px;align-items:center;padding-block:18px;border-bottom:1px solid var(--hair)}
+.c-tile{overflow:hidden;aspect-ratio:4/5;background:var(--dark)}
+.c-tile img{width:100%;height:100%;object-fit:cover}
+.c-name{font:italic 400 1.05rem/1.3 var(--display);letter-spacing:.03em;text-transform:uppercase}
+.c-meta{margin-top:2px;font-size:var(--t-small);color:var(--ink-2)}
+.qty{display:inline-flex;align-items:center;gap:11px;margin-top:9px}
+.qty button{width:24px;height:24px;border:1px solid var(--hair);background:none;border-radius:50%;cursor:pointer;line-height:1;font-size:12px}
+.c-price{font:400 1.05rem/1 var(--display);text-align:right}
+.c-rm{display:block;margin:10px 0 0 auto;background:none;border:0;padding:0;font:400 var(--t-small)/1 var(--sans);color:var(--ink-2);cursor:pointer;text-decoration:underline}
+.drawer-foot{display:grid;gap:14px;padding-top:18px;border-top:1px solid var(--hair)}
+.sub{display:flex;justify-content:space-between;font:400 1.2rem/1 var(--display)}
+.fine{font-size:var(--t-small);color:var(--ink-2);text-align:center}
+.toast{position:fixed;z-index:30;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));translate:-50% 14px;max-width:calc(100% - 36px);padding:14px 22px;background:var(--ink);color:var(--paper);font:400 var(--t-small)/1.5 var(--sans);opacity:0;pointer-events:none;transition:opacity .4s,translate .4s}
+.toast.on{opacity:1;translate:-50% 0}
+.gate{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;background:var(--dark);color:var(--on-dark);text-align:center;transition:opacity 1.4s ease,visibility 1.4s;overflow:hidden;isolation:isolate}
+.gate.out{opacity:0;visibility:hidden;pointer-events:none}
+.gate{cursor:pointer}
+.gate-bg{position:absolute;inset:0;z-index:-1;background:url("img/gate.jpg") center/cover no-repeat;animation:gateIn 7s cubic-bezier(.16,1,.3,1) both}
+.gate-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,9,7,.62),rgba(10,9,7,.44) 46%,rgba(10,9,7,.78))}
+@keyframes gateIn{from{transform:scale(1.11)}to{transform:scale(1)}}
+.gate-mark{font:400 clamp(30px,6vw,54px)/1 var(--display);letter-spacing:.22em;text-indent:.22em}
+.gate-sub{font:italic 400 clamp(16px,2vw,19px)/1.4 var(--display);color:rgba(244,240,232,.74)}
+.gate button{font:500 var(--t-micro)/1 var(--sans);letter-spacing:var(--ls-micro);text-transform:uppercase;color:var(--on-dark);background:none;border:1px solid rgba(244,240,232,.55);padding:16px 30px;cursor:pointer;transition:background-color .4s,color .4s,border-color .4s}
+.gate button:hover,.gate button:focus-visible{background:var(--on-dark);border-color:var(--on-dark);color:var(--dark)}
+body.gated .hero *{animation-play-state:paused!important}
+body.gated{overflow:hidden}
+.cur{position:fixed;inset:0;z-index:200;pointer-events:none;opacity:0;transition:opacity .35s}
+body.cur-on .cur{opacity:1}
+.cur span{position:absolute;left:0;top:0;display:block;will-change:transform}
+.c-dot{width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%;background:var(--cursor)}
+.c-ring{width:36px;height:36px;margin:-18px 0 0 -18px;border-radius:50%;border:1px solid var(--cursor);transition:width .4s cubic-bezier(.16,1,.3,1),height .4s cubic-bezier(.16,1,.3,1),margin .4s cubic-bezier(.16,1,.3,1),background-color .4s,opacity .25s}
+body.hot .c-ring{width:62px;height:62px;margin:-31px 0 0 -31px;background:rgba(162,83,92,.13)}
+body.txt .c-ring,body.txt .c-dot{opacity:0}
+body.cur-on,body.cur-on *{cursor:none}
+body.cur-on input,body.cur-on textarea{cursor:text}
+@media (pointer:coarse){.cur{display:none}}
+.sound{position:fixed;z-index:9;left:max(18px,env(safe-area-inset-left,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:11px;padding:11px 17px;background:rgba(250,249,246,.84);color:var(--ink);border:1px solid var(--hair);backdrop-filter:blur(10px);font:500 var(--t-micro)/1 var(--sans);letter-spacing:var(--ls-micro);text-transform:uppercase;cursor:pointer;transition:background-color .4s}
+.sound:hover{background:var(--paper)}
+.eq{display:flex;align-items:flex-end;gap:2px;height:11px}
+.eq i{display:block;width:1px;height:2px;background:currentColor}
+.sound[aria-pressed="true"] .eq i{animation:eq 2.6s ease-in-out infinite}
+.eq i:nth-child(2){animation-delay:-.9s}.eq i:nth-child(3){animation-delay:-1.7s}.eq i:nth-child(4){animation-delay:-.4s}
+@keyframes eq{0%,100%{height:2px}50%{height:11px}}
+
+@media (max-width:980px){
+  .stage{grid-template-columns:minmax(0,1fr)}
+  .stage-img{aspect-ratio:1/1}
+  .sound{gap:0;padding:0;width:46px;height:46px;justify-content:center;border-radius:50%}
+  #sndTxt{display:none}
+  .panel{border-left:0;border-top:1px solid var(--hair)}
+  .rituel-grid,.maison-grid,.foot-grid{grid-template-columns:minmax(0,1fr)}
+  .rituel-l{justify-items:stretch}
+  .thumbs{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .hide-s{display:none}
+  .stage-img{aspect-ratio:4/5}
+  .mark{letter-spacing:.22em!important}
+  .thumbs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .facts{gap:12px}
+  .facts dd{letter-spacing:.08em;font-size:9px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .anim [data-rise]{opacity:1;transform:none}
+  .hero-media video{display:none}
+}
+</style>
+
+<div class="gate" id="gate" role="dialog" aria-label="Welcome"><span class="gate-bg" aria-hidden="true"></span><div class="gate-mark">SOIE NOIRE</div><div class="gate-sub">Maison de parfum, Lyon</div><button type="button" id="enter">Enter with sound</button></div>
+<noscript><style>.gate{display:none}</style></noscript>
+<script>
+/* The gate gets its own small script, right here, so that nothing further down the
+   page can keep it from opening: a visitor must never be able to get stuck on it. */
+(function(){
+  var g=document.getElementById('gate'),b=document.body;
+  if(!g)return;
+  b.classList.add('gated');
+  function open(){
+    g.classList.add('out');b.classList.remove('gated');
+    removeEventListener('keydown',open);
+    setTimeout(function(){if(g.parentNode)g.parentNode.removeChild(g)},1500);
+  }
+  g.addEventListener('click',open);
+  addEventListener('keydown',open);
+})();
+</script>
+<header class="top">
+  <div class="wrap top-in">
+    <nav class="nav-l" aria-label="Main">
+      <a href="#collection" data-go>Collection</a>
+      <a href="#expo" data-go class="hide-s">Archive</a>
+      <a href="#maison" data-go class="hide-s">Maison</a>
+    </nav>
+    <a class="mark" href="#top" data-go aria-label="Soie Noire, back to top">Soie Noire</a>
+    <div class="nav-r"><button class="bag-btn" id="bagBtn" type="button" aria-haspopup="dialog">Bag<span id="bagCount">0</span></button></div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="hero-media">
+      <img src="img/hero.jpg" alt="" aria-hidden="true">
+      <video id="heroVid" poster="img/hero.jpg" autoplay muted loop playsinline preload="auto" aria-hidden="true"><source src="video/hero.mp4" type="video/mp4"></video>
+    </div>
+    <span class="hero-veil" aria-hidden="true"></span>
+    <div class="grain"></div>
+    <div class="wrap hero-in">
+      <p class="eyebrow">Maison de parfum · Lyon</p>
+      <h1 id="heroTitle">Soie Noire</h1>
+      <p class="hero-sub">Six perfumes, each composed around a single evening. Poured in batches of three hundred and numbered by hand.</p>
+      <div class="hero-cta">
+        <a class="btn ghost" href="#collection" data-go>See the collection</a>
+        <a class="link" href="#rituel" data-go>Find your scent</a>
+      </div>
+    </div>
+    <span class="scroll-hint" aria-hidden="true">Scroll<i></i></span>
+  </section>
+
+  <section class="manifesto">
+    <div class="wrap">
+      <p class="eyebrow" data-rise>The idea</p>
+      <p class="mf" data-rise>We do not name our perfumes after their notes. We name them after moments, and we photograph the moment before we ever build the formula.</p>
+    </div>
+  </section>
+
+  <section class="coll" id="collection">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow" data-rise>The collection</p>
+        <h2 data-rise>Six moments, poured small</h2>
+      </div>
+
+      <div class="stage" data-rise>
+        <figure class="stage-img" id="stageImg">
+          <img id="pPhoto" src="img/s1.jpg" alt="">
+          <span class="stage-tint" id="stageTint" aria-hidden="true"></span>
+          <div class="grain"></div>
+          <span class="stage-num" id="stageNum" aria-hidden="true">01</span>
+        </figure>
+
+        <article class="panel" aria-live="polite">
+          <div class="panel-top"><span id="pIdx">Nº 01 / 06</span><span id="pBatch">Batch 03</span></div>
+          <h3 class="p-name" id="pName"></h3>
+          <p class="p-fam" id="pFam"></p>
+          <p class="p-moment" id="pMoment"></p>
+          <div class="p-nav">
+            <button class="arrow" id="prevBtn" type="button" aria-label="Previous perfume">&#8592;</button>
+            <button class="arrow" id="nextBtn" type="button" aria-label="Next perfume">&#8594;</button>
+          </div>
+          <div class="buy">
+            <div class="sizes" role="radiogroup" aria-label="Size">
+              <button class="size" type="button" role="radio" aria-checked="true" data-size="50">50 ml</button>
+              <button class="size" type="button" role="radio" aria-checked="false" data-size="100">100 ml</button>
+            </div>
+            <p class="price" id="pPrice">£185</p>
+            <button class="btn wide" id="addBtn" type="button">Add to bag</button>
+          </div>
+        </article>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Perfume details">
+        <button class="tab" role="tab" id="tab-story" aria-selected="true" data-tab="story" type="button">Story</button>
+        <button class="tab" role="tab" id="tab-notes" aria-selected="false" data-tab="notes" type="button">Notes</button>
+        <button class="tab" role="tab" id="tab-details" aria-selected="false" data-tab="details" type="button">Details</button>
+      </div>
+      <div class="tabbody" id="tabBody" role="tabpanel" aria-labelledby="tab-story"></div>
+
+      <div class="pick">
+        <p class="eyebrow" data-rise>Choose a moment</p>
+        <ul class="thumbs" id="thumbs" data-rise></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="expo" id="expo">
+    <div class="wrap expo-head">
+      <p class="eyebrow" data-rise>The archive</p>
+      <h2 data-rise>Everything we smelled first</h2>
+      <p class="lede" data-rise>Six plates hang in the atelier in Lyon: the light, the fabric, the thing that was burning. Every perfume in the collection began at one of them.</p>
+    </div>
+    <div class="rail" id="rail" tabindex="0" aria-label="Archive, scroll sideways">
+      <figure><span class="ph"><img src="img/silk.jpg" alt="Pale silk catching the light" loading="lazy"></span>
+        <figcaption><span class="cap-n">Plate i</span><span class="cap-t">Soie claire</span><span class="cap-d">The first bolt the family kept back. Still in the attic, still uncut.</span></figcaption></figure>
+      <figure><span class="ph"><img src="img/bloom1.jpg" alt="An open poppy against black" loading="lazy"></span>
+        <figcaption><span class="cap-n">Plate ii</span><span class="cap-t">Pavot ouvert</span><span class="cap-d">Photographed the morning it opened. It had closed again by noon.</span></figcaption></figure>
+      <figure><span class="ph"><img src="img/smoke.jpg" alt="A ribbon of smoke" loading="lazy"></span>
+        <figcaption><span class="cap-n">Plate iii</span><span class="cap-t">Fumée</span><span class="cap-d">Incense, lit once at the end of a long evening and never relit.</span></figcaption></figure>
+      <figure><span class="ph"><img src="img/bloom2.jpg" alt="A single daisy in a dark field" loading="lazy"></span>
+        <figcaption><span class="cap-n">Plate iv</span><span class="cap-t">Marguerite</span><span class="cap-d">A field outside the city, shot at dusk on the last warm night.</span></figcaption></figure>
+      <figure><span class="ph"><img src="img/lumiere.jpg" alt="Light drawn across a stone floor" loading="lazy"></span>
+        <figcaption><span class="cap-n">Plate v</span><span class="cap-t">Lumière d'eau</span><span class="cap-d">Noon through the courtyard glass, drawn on the stone floor.</span></figcaption></figure>
+      <figure><span class="ph"><img src="img/band.jpg" alt="Folded black satin" loading="lazy"></span>
+        <figcaption><span class="cap-n">Plate vi</span><span class="cap-t">Soie noire</span><span class="cap-d">The frame the house is named after. Nothing else was in the room.</span></figcaption></figure>
+    </div>
+    <div class="wrap expo-foot"><span>Drag or hover to hold</span><i aria-hidden="true"></i><span>Six plates</span></div>
+  </section>
+
+  <section class="wrap maison" id="maison">
+    <div class="maison-grid">
+      <figure class="maison-img" data-rise>
+        <img src="img/maison.jpg" alt="Folds of black silk" data-par>
+        <div class="grain"></div>
+        <figcaption>Black silk · Lyon archive</figcaption>
+      </figure>
+      <div class="maison-text">
+        <p class="eyebrow" data-rise>La Maison</p>
+        <h2 data-rise>Silk first, scent after</h2>
+        <p class="body" data-rise>Soie Noire began in an attic in Lyon, among bolts of black silk that a family of weavers never sold. The perfumer kept one rule from them: make less, and make it well.</p>
+        <p class="body" data-rise>When a batch is gone it stays gone until the next one is released. Nothing is reformulated to meet demand, and nothing is made in a hurry.</p>
+        <dl class="facts" data-rise>
+          <div><dt>300</dt><dd>Bottles per batch</dd></div>
+          <div><dt>8</dt><dd>Weeks of maceration</dd></div>
+          <div><dt>6</dt><dd>Moments so far</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+  <section class="rituel" id="rituel">
+    <div class="wrap rituel-grid">
+      <form class="rituel-l" id="rForm">
+        <p class="eyebrow" data-rise>Le Rituel</p>
+        <h2 data-rise>Describe the evening you want to remember</h2>
+        <p class="lede" data-rise>Write it in your own words. We match it against the collection and tell you why each one fits.</p>
+        <div style="width:100%">
+          <label class="sr" for="rText">Your evening</label>
+          <textarea class="ta" id="rText" rows="3" maxlength="240">Candlelight, a velvet dress, rain on the terrace, a glass of cognac after the show.</textarea>
+        </div>
+        <div class="chips" id="chips">
+          <button class="chip" type="button">A rooftop at midnight, champagne and city lights</button>
+          <button class="chip" type="button">Sunday dinner with old friends, honey and wine</button>
+          <button class="chip" type="button">Dawn after the party, leather and smoke</button>
+        </div>
+        <button class="btn" type="submit">Reveal my scent</button>
+      </form>
+      <div id="rOut" aria-live="polite"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <p class="foot-mark">Soie Noire</p>
+        <p class="foot-note">Perfumes composed around single evenings.</p>
+        <address class="foot-addr">
+          <span>14 rue des Capucins<br>69001 Lyon, France</span>
+          <span>Atelier open Tuesday to Saturday, by appointment</span>
+          <a href="mailto:bonjour@soienoire.fr">bonjour@soienoire.fr</a>
+          <a href="tel:+33472001806">+33 4 72 00 18 06</a>
+        </address>
+      </div>
+      <nav aria-label="Footer">
+        <button class="link" type="button" data-demo>Shipping</button>
+        <button class="link" type="button" data-demo>Contact</button>
+        <button class="link" type="button" data-demo>Instagram</button>
+        <button class="link" type="button" data-demo>Pinterest</button>
+      </nav>
+      <form class="nl" id="nl" novalidate>
+        <label for="nlMail">Cercle Noir · first access to new batches</label>
+        <div class="nl-row"><input id="nlMail" type="email" placeholder="Your email" autocomplete="email"><button type="submit">Join</button></div>
+        <p class="nl-msg" id="nlMsg" aria-live="polite"></p>
+      </form>
+    </div>
+    <p class="legal">© 2026 Maison Soie Noire. A fictional brand created for a portfolio case study. Demo store: no payments are processed. Imagery from Pexels and AI-generated visuals.</p>
+  </div>
+</footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Your bag" aria-hidden="true">
+  <div class="drawer-head"><h2>Your bag</h2><button class="link" id="drawerClose" type="button">Close</button></div>
+  <ul class="cart-list" id="cartList"></ul>
+  <div class="drawer-foot">
+    <div class="sub"><span>Subtotal</span><span id="cartSub">£0</span></div>
+    <button class="btn wide" id="checkout" type="button">Checkout</button>
+    <p class="fine">Demo store. No payment is taken.</p>
+  </div>
+</aside>
+<div class="toast" id="toast" role="status"></div>
+<button class="sound" id="sound" type="button" aria-pressed="false"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span id="sndTxt">Sound on</span></button>
+
+<script>
+(function(){
+'use strict';
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function money(n){return '£'+n}
+function toast(m){var t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.remove('on')},2800)}
+
+/* ---------- data ---------- */
+var PRICE={50:185,100:275};
+var SCENTS=[
+ {id:'nuit-doree',name:'Nuit Dorée',num:'01',img:'img/s1.jpg',color:'#C8A464',fam:'Amber floral',
+  moment:'A golden night at a private reception.',
+  story:'The room is full, the champagne is cold, and someone has just said your name across it. Saffron opens bright and a little dangerous, then black rose and amber settle into your collar for the rest of the night.',
+  notes:{top:'Saffron, pink pepper',heart:'Black rose, geranium',base:'Amber, cashmere wood'},batch:247,intensity:4,
+  tags:['night','golden','gold','party','gala','reception','champagne','saffron','evening','celebration','glamour','dance','rooftop','city','lights','midnight','toast'],
+  hook:'saffron and black rose over warm amber'},
+ {id:'fruit-defendu',name:'Fruit Défendu',num:'02',img:'img/s2.jpg',color:'#8E5C77',fam:'Fruity gourmand',
+  moment:'A forbidden fig, late in the summer.',
+  story:'Late summer, a garden that is not yours, a fig you were told to leave alone. Black fig leaf and plum open green and juicy, then vanilla and tonka turn them sweet and slow.',
+  notes:{top:'Black fig leaf, bergamot',heart:'Plum, fig milk',base:'Vanilla, tonka bean'},batch:198,intensity:3,
+  tags:['sweet','fruit','fig','garden','summer','forbidden','kiss','flirt','secret','orchard','plum','sensual','playful','vanilla','evening'],
+  hook:'black fig and plum melting into vanilla'},
+ {id:'velours-rouge',name:'Velours Rouge',num:'03',img:'img/s3.jpg',color:'#A2535C',fam:'Floral suede',
+  moment:'A velvet box above the stage.',
+  story:'A box above the stage, the curtain still moving, rain starting on the street outside. Black cherry and iris meet suede in a perfume that feels like red velvet under your hand.',
+  notes:{top:'Black cherry, cassis',heart:'Iris, rose',base:'Suede, benzoin'},batch:276,intensity:4,
+  tags:['theatre','theater','velvet','opera','red','candle','candlelight','dress','rain','terrace','romantic','cherry','dramatic','cinema','show','stage','curtain'],
+  hook:'black cherry and iris on soft suede'},
+ {id:'table-splendide',name:'Table Splendide',num:'04',img:'img/s4.jpg',color:'#A89552',fam:'Gourmand tobacco',
+  moment:'The dinner that ran past midnight.',
+  story:'The dinner that ran until two in the morning. Pear and honey arrive first, then tobacco leaf and cognac, and the cedar of a table nobody wanted to leave.',
+  notes:{top:'Pear, lemon zest',heart:'Honey, tobacco leaf',base:'Cognac, cedar, tonka'},batch:131,intensity:5,
+  tags:['dinner','feast','table','honey','cognac','wine','family','kitchen','cooking','banquet','friends','autumn','warm','pear','tobacco','sunday','cedar'],
+  hook:'pear, honey and tobacco finished with cognac'},
+ {id:'peau-d-ambre',name:'Peau d’Ambre',num:'05',img:'img/s5.jpg',color:'#C09070',fam:'Amber woody musk',
+  moment:'The warmth left on skin after a long night.',
+  story:'The warmth that stays on skin after a long evening. Mandarin lifts, jasmine and sandalwood soften, and amber with white musk keeps close, like a borrowed jacket.',
+  notes:{top:'Mandarin',heart:'Jasmine sambac, ylang',base:'Amber, sandalwood, white musk'},batch:212,intensity:2,
+  tags:['skin','beach','sun','sunset','touch','bath','soft','cozy','intimate','morning','sandalwood','comfort','jacket','sea','holiday','jasmine','embrace'],
+  hook:'jasmine and sandalwood over amber and musk'},
+ {id:'dernier-soupir',name:'Dernier Soupir',num:'06',img:'img/s6.jpg',color:'#7D7268',fam:'Smoky leather',
+  moment:'The last hour before dawn.',
+  story:'The last quiet hour before dawn, when the party has become a conversation. Black pepper and juniper clear the air, incense lingers, and leather closes the night.',
+  notes:{top:'Black pepper, juniper',heart:'Incense, cypress',base:'Leather, birch tar'},batch:164,intensity:4,
+  tags:['dawn','sunrise','leather','smoke','winter','fireplace','last','train','travel','farewell','silence','cold','jazz','cigar','after','quiet','incense'],
+  hook:'black pepper, incense and worn leather'}
+];
+var N=SCENTS.length;
+SCENTS.forEach(function(s){var i=new Image();i.src=s.img});
+
+/* ---------- hero wordmark, letter by letter ---------- */
+(function(){
+  var h=$('#heroTitle');
+  if(reduce)return;
+  var txt=h.textContent;h.textContent='';
+  txt.split('').forEach(function(c,i){
+    var sp=document.createElement('span');
+    sp.textContent=c===' '?' ':c;
+    sp.style.animationDelay=(0.3+i*0.05).toFixed(2)+'s';
+    h.appendChild(sp);
+  });
+})();
+
+/* ---------- reveal on scroll ---------- */
+if(!reduce&&'IntersectionObserver'in window){
+  document.body.classList.add('anim');
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+  },{rootMargin:'0px 0px -8% 0px',threshold:.06});
+  $$('[data-rise]').forEach(function(el,i){el.style.transitionDelay=((i%4)*0.07).toFixed(2)+'s';io.observe(el)});
+}
+
+/* ---------- parallax, and the archive as a slow gallery conveyor ---------- */
+(function(){
+  if(reduce)return;
+  var pars=$$('[data-par]'),queued=false;
+  function frame(){
+    queued=false;
+    var vh=innerHeight;
+    pars.forEach(function(el){
+      var r=el.parentElement.getBoundingClientRect();
+      if(r.bottom<-200||r.top>vh+200)return;
+      var p=(r.top+r.height/2-vh/2)/vh;
+      el.style.transform='scale(1.14) translateY('+(p*-4).toFixed(2)+'%)';
+    });
+  }
+  function req(){if(!queued){queued=true;requestAnimationFrame(frame)}}
+  addEventListener('scroll',req,{passive:true});
+  addEventListener('resize',req);
+  frame();
+
+  /* The plates drift on their own, at reading pace. The set is duplicated once,
+     so when the loop wraps the frame under the eye is identical: no seam, no jump. */
+  var rail=$('#rail'),bar=$('.expo-foot i');
+  if(!rail)return;
+  var set=Array.prototype.slice.call(rail.children),SPEED=26;
+  set.forEach(function(f){var c=f.cloneNode(true);c.setAttribute('aria-hidden','true');rail.appendChild(c)});
+  var span=0,pos=0,last=0,hover=false,held=false,seen=false;
+  function measure(){var k=rail.children;span=k.length>set.length?k[set.length].offsetLeft-k[0].offsetLeft:0}
+  measure();addEventListener('resize',measure);
+  function tick(t){
+    requestAnimationFrame(tick);
+    var dt=last?Math.min(.05,(t-last)/1000):0;last=t;
+    if(!seen||!span)return;
+    if(hover||held){pos=rail.scrollLeft}
+    else{
+      pos+=SPEED*dt;
+      if(pos>=span)pos-=span;
+      rail.scrollLeft=pos;
+    }
+    if(bar)bar.style.setProperty('--rail-p',(((pos%span)/span)*285).toFixed(1)+'%');
+  }
+  requestAnimationFrame(tick);
+  if('IntersectionObserver'in window)new IntersectionObserver(function(e){seen=e[0].isIntersecting}).observe(rail);
+  else seen=true;
+  function settle(){pos=rail.scrollLeft;if(pos>=span)pos-=span}
+  ['pointerenter','focusin'].forEach(function(ev){rail.addEventListener(ev,function(){hover=true})});
+  ['pointerleave','focusout'].forEach(function(ev){rail.addEventListener(ev,function(){hover=false;settle()})});
+  var x0=0,l0=0;
+  rail.addEventListener('pointerdown',function(e){
+    if(e.pointerType!=='mouse')return;
+    held=true;x0=e.clientX;l0=rail.scrollLeft;rail.setPointerCapture(e.pointerId);
+  });
+  rail.addEventListener('pointermove',function(e){if(held)rail.scrollLeft=l0-(e.clientX-x0)});
+  ['pointerup','pointercancel'].forEach(function(ev){rail.addEventListener(ev,function(){held=false;settle()})});
+})();
+
+/* ---------- nav ---------- */
+function go(id){var el=document.getElementById(id);if(!el)return;window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-(id==='top'?0:64),behavior:reduce?'auto':'smooth'})}
+$$('[data-go]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();go(a.getAttribute('href').slice(1))})});
+$$('[data-demo]').forEach(function(b){b.addEventListener('click',function(){toast('Not part of the prototype.')})});
+
+/* ---------- collection ---------- */
+var idx=0,size=50,tab='story';
+$('#thumbs').innerHTML=SCENTS.map(function(s,i){
+  return '<li><button class="thumb" type="button" data-i="'+i+'" aria-label="'+s.name+', from '+money(PRICE[50])+'"><span class="thumb-tile"><img src="'+s.img+'" alt="" loading="lazy"></span><span class="thumb-meta"><span class="thumb-name">'+s.name+'</span><span class="thumb-price">From '+money(PRICE[50])+'</span></span></button></li>';
+}).join('');
+var WORD=['','Whisper','Soft','Moderate','Rich','Enveloping'];
+function renderTab(){
+  var s=SCENTS[idx],b=$('#tabBody'),h='';
+  if(tab==='story')h='<p class="story">'+s.story+'</p>';
+  else if(tab==='notes')h='<dl class="pyr"><div><dt>Top</dt><dd>'+s.notes.top+'</dd></div><div><dt>Heart</dt><dd>'+s.notes.heart+'</dd></div><div><dt>Base</dt><dd>'+s.notes.base+'</dd></div></dl>';
+  else{var d='';for(var k=1;k<=5;k++)d+='<i'+(k<=s.intensity?' class="on"':'')+'></i>';
+    h='<dl class="det"><dt>Concentration</dt><dd>Extrait de parfum</dd><dt>Sizes</dt><dd>50 ml · 100 ml</dd><dt>Batch</dt><dd>N&ordm; 03</dd><dt>Maceration</dt><dd>8 weeks, cold</dd><dt>Presence</dt><dd><span class="dots" role="img" aria-label="Presence '+s.intensity+' of 5">'+d+'</span>'+WORD[s.intensity]+'</dd></dl>';}
+  b.innerHTML=h;
+}
+function fill(){
+  var s=SCENTS[idx],ph=$('#pPhoto');
+  ph.src=s.img;ph.alt=s.moment;
+  $('#pName').textContent=s.name;$('#pFam').textContent='Extrait de parfum · '+s.fam;$('#pMoment').textContent=s.moment;
+  $('#pPrice').textContent=money(PRICE[size]);renderTab();
+}
+function paint(){
+  var s=SCENTS[idx];
+  $('#stageTint').style.background=s.color;
+  $('#stageNum').textContent=s.num;
+  $('#pIdx').textContent='Nº '+s.num+' / 0'+N;$('#pBatch').textContent='Batch 03';
+  $$('.thumb').forEach(function(b,i){if(i===idx)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current')});
+}
+function select(i){
+  idx=(i+N)%N;paint();
+  var st=$('#stageImg');st.classList.add('swap');
+  setTimeout(function(){fill();st.classList.remove('swap')},reduce?0:380);
+}
+$('#prevBtn').addEventListener('click',function(){select(idx-1)});
+$('#nextBtn').addEventListener('click',function(){select(idx+1)});
+$('#thumbs').addEventListener('click',function(e){var b=e.target.closest('.thumb');if(b)select(+b.getAttribute('data-i'))});
+$$('.size').forEach(function(b){b.addEventListener('click',function(){
+  size=+b.getAttribute('data-size');$$('.size').forEach(function(x){x.setAttribute('aria-checked',x===b?'true':'false')});$('#pPrice').textContent=money(PRICE[size]);
+})});
+var tabs=$$('.tab');
+function setTab(n,f){
+  tab=n;tabs.forEach(function(t){var on=t.getAttribute('data-tab')===n;t.setAttribute('aria-selected',on?'true':'false');t.tabIndex=on?0:-1;if(on){$('#tabBody').setAttribute('aria-labelledby',t.id);if(f)t.focus()}});
+  renderTab();
+}
+tabs.forEach(function(t,i){
+  t.addEventListener('click',function(){setTab(t.getAttribute('data-tab'))});
+  t.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();setTab(tabs[(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length].getAttribute('data-tab'),true)}});
+});
+
+/* ---------- bag ---------- */
+var cart=[],lastFocus=null;
+function renderCart(){
+  var l=$('#cartList'),c=0,sub=0;
+  cart.forEach(function(it){c+=it.qty;sub+=it.qty*it.price});
+  $('#bagCount').textContent=c;$('#cartSub').textContent=money(sub);
+  if(!cart.length){l.innerHTML='<li class="cart-empty">Your bag is empty.<br>Choose a moment from the collection.</li>';return}
+  l.innerHTML=cart.map(function(it){
+    return '<li><span class="c-tile"><img src="'+it.img+'" alt=""></span><div><p class="c-name">'+it.name+'</p><p class="c-meta">'+it.meta+'</p><div class="qty"><button type="button" data-act="dec" data-key="'+it.key+'" aria-label="Fewer">−</button><span aria-live="polite">'+it.qty+'</span><button type="button" data-act="inc" data-key="'+it.key+'" aria-label="More">+</button></div></div><div><p class="c-price">'+money(it.price*it.qty)+'</p><button class="c-rm" type="button" data-act="rm" data-key="'+it.key+'">Remove</button></div></li>';
+  }).join('');
+}
+function openBag(){lastFocus=document.activeElement;$('#drawer').classList.add('open');$('#drawer').setAttribute('aria-hidden','false');$('#scrim').classList.add('on');setTimeout(function(){$('#drawerClose').focus()},70)}
+function closeBag(){$('#drawer').classList.remove('open');$('#drawer').setAttribute('aria-hidden','true');$('#scrim').classList.remove('on');if(lastFocus&&lastFocus.focus)lastFocus.focus()}
+function add(it){
+  var f=cart.filter(function(c){return c.key===it.key})[0];
+  if(f)f.qty++;else{it.qty=1;cart.push(it)}
+  renderCart();var b=$('#bagBtn');b.classList.add('bump');setTimeout(function(){b.classList.remove('bump')},400);openBag();
+}
+$('#addBtn').addEventListener('click',function(){var s=SCENTS[idx];add({key:s.id+':'+size,img:s.img,name:s.name,meta:'Extrait de parfum · '+size+' ml',price:PRICE[size]})});
+$('#bagBtn').addEventListener('click',openBag);
+$('#drawerClose').addEventListener('click',closeBag);
+$('#scrim').addEventListener('click',closeBag);
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&$('#drawer').classList.contains('open'))closeBag()});
+$('#cartList').addEventListener('click',function(e){
+  var b=e.target.closest('button[data-act]');if(!b)return;
+  var k=b.getAttribute('data-key'),a=b.getAttribute('data-act');
+  cart.forEach(function(c){if(c.key===k){if(a==='inc')c.qty++;else if(a==='dec')c.qty--;else c.qty=0}});
+  cart=cart.filter(function(c){return c.qty>0});renderCart();
+});
+$('#checkout').addEventListener('click',function(){toast('Demo store — checkout is not connected.')});
+
+/* ---------- Le Rituel ---------- */
+function hit(w,t){return w.some(function(x){return x===t||(t.length>=5&&x.length>=5&&(x.indexOf(t)===0||t.indexOf(x)===0))})}
+function rank(text){
+  var w=(text.toLowerCase().match(/[a-zà-ÿ']+/g)||[]);
+  var o=SCENTS.map(function(s,i){var h=s.tags.filter(function(t){return hit(w,t)});return {s:s,i:i,hits:h,score:h.length}});
+  if(!o.some(function(x){return x.score>0})){var sum=0;for(var k=0;k<text.length;k++)sum+=text.charCodeAt(k);var r=sum%N;
+    o=o.map(function(x){x.order=(x.i-r+N)%N;return x}).sort(function(a,b){return a.order-b.order})}
+  else o.sort(function(a,b){return b.score-a.score||a.i-b.i});
+  return o.slice(0,3);
+}
+function reason(r,k){
+  if(r.hits.length)return 'You mention '+r.hits.slice(0,3).join(', ')+'. '+r.s.name+' answers with '+r.s.hook+'.';
+  return k===0?'No exact words matched, so this is a first guess by mood: '+r.s.hook+'.':'Not in your words, but worth trying for the contrast: '+r.s.hook+'.';
+}
+var LBL=['Best match','Also suits you','A bolder choice'];
+function renderRes(l){
+  $('#rOut').innerHTML='<ul class="res">'+l.map(function(r,k){
+    return '<li><span class="r-tile"><img src="'+r.s.img+'" alt="" loading="lazy"></span><div class="r-body"><p class="eyebrow">'+LBL[k]+'</p><h3>'+r.s.name+'</h3><p>'+reason(r,k)+'</p><button class="link" type="button" data-pick="'+r.i+'">See it in the collection</button></div></li>';
+  }).join('')+'</ul>';
+}
+function runRituel(){
+  var t=$('#rText').value.trim();
+  if(!t){toast('Describe a moment first.');return}
+  $('#rOut').innerHTML='<p class="thinking">Composing your matches…</p>';
+  setTimeout(function(){renderRes(rank(t))},reduce?60:900);
+}
+$('#rForm').addEventListener('submit',function(e){e.preventDefault();runRituel()});
+$('#chips').addEventListener('click',function(e){var c=e.target.closest('.chip');if(!c)return;$('#rText').value=c.textContent;runRituel()});
+$('#rOut').addEventListener('click',function(e){var b=e.target.closest('[data-pick]');if(!b)return;select(+b.getAttribute('data-pick'));go('collection')});
+
+/* ---------- newsletter ---------- */
+$('#nl').addEventListener('submit',function(e){
+  e.preventDefault();var v=$('#nlMail').value.trim(),m=$('#nlMsg');
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){m.textContent='Please enter a valid email address.';return}
+  m.textContent='Welcome to the Cercle Noir.';$('#nlMail').value='';
+});
+
+/* ---------- music: one looping track, starts at the visitor's first gesture ---------- */
+var snd=$('#sound'),sndTxt=$('#sndTxt'),muted=false;
+var track=new Audio('audio/music.mp3');track.loop=true;track.preload='auto';track.volume=.0;
+function setSound(s){snd.setAttribute('aria-pressed',s?'true':'false');sndTxt.textContent=s?'Sound on':'Sound off'}
+function fadeTo(v,ms){var from=track.volume,t0=performance.now();(function step(t){var k=Math.min(1,(t-t0)/ms);track.volume=from+(v-from)*k;if(k<1)requestAnimationFrame(step)})(t0)}
+function startMusic(){
+  if(muted||!track.paused)return;
+  var p=track.play();
+  if(p&&p.then)p.then(function(){setSound(true);fadeTo(.55,2500);unbind()}).catch(function(){setSound(false)});
+}
+/* if the visitor already went through the gate while this script was still loading, pick the music up now */
+if(!document.getElementById('gate'))setTimeout(startMusic,0);
+var evs=['pointerdown','keydown','wheel','touchstart','scroll','pointermove','click'];
+function unbind(){evs.forEach(function(ev){removeEventListener(ev,startMusic)})}
+evs.forEach(function(ev){addEventListener(ev,startMusic,{passive:true})});
+snd.addEventListener('click',function(e){
+  e.stopPropagation();
+  if(snd.getAttribute('aria-pressed')==='true'){muted=true;fadeTo(0,500);setTimeout(function(){track.pause()},520);setSound(false)}
+  else{muted=false;track.play().then(function(){setSound(true);fadeTo(.55,1200)}).catch(function(){})}
+});
+renderCart();paint();fill();renderRes(rank($('#rText').value));
+})();
+</script>
+
+<script>
+/* The pointer: a dot on the point, a ring half a beat behind it. Mouse only, and
+   it keeps out of the way of a text field, where the caret has to be visible. */
+(function(){
+  if(!matchMedia('(pointer:fine)').matches)return;
+  var b=document.body,slow=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var cur=document.createElement('div');
+  cur.className='cur';cur.setAttribute('aria-hidden','true');
+  cur.innerHTML='<span class="c-ring"></span><span class="c-dot"></span>';
+  b.appendChild(cur);b.classList.add('cur-on');
+  var dot=cur.querySelector('.c-dot'),ring=cur.querySelector('.c-ring');
+  var ex=innerWidth/2,ey=innerHeight/2,rx=ex,ry=ey,seen=false;
+  addEventListener('pointermove',function(e){
+    if(e.pointerType!=='mouse')return;
+    ex=e.clientX;ey=e.clientY;
+    if(!seen){seen=true;rx=ex;ry=ey}
+    var t=e.target;
+    b.classList.toggle('hot',!!(t.closest&&t.closest('a,button,#rail')));
+    b.classList.toggle('txt',!!(t.closest&&t.closest('input,textarea')));
+  },{passive:true});
+  document.addEventListener('mouseleave',function(){cur.style.opacity='0'});
+  document.addEventListener('mouseenter',function(){cur.style.opacity=''});
+  (function f(){
+    requestAnimationFrame(f);
+    var k=slow?1:.19;
+    rx+=(ex-rx)*k;ry+=(ey-ry)*k;
+    dot.style.transform='translate3d('+ex+'px,'+ey+'px,0)';
+    ring.style.transform='translate3d('+rx.toFixed(1)+'px,'+ry.toFixed(1)+'px,0)';
+  })();
+})();
+</script>
